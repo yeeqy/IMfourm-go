@@ -2,6 +2,7 @@ package bootstrap
 //目录存放 程序初始化的代码
 
 import (
+	"IMfourm-go/app/http/middlewares"
 	"IMfourm-go/routes"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -24,7 +25,7 @@ func SetupRoute(router *gin.Engine){
 
 func registerGlobalMiddleWare(router *gin.Engine){
 	router.Use(
-		gin.Logger(),
+		middlewares.Logger(),
 		gin.Recovery(),
 	)
 }
