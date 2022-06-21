@@ -1,1 +1,6 @@
 package config
+
+
+func Initialize(){
+}
+
