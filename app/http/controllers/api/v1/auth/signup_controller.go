@@ -15,6 +15,7 @@ type SignupController struct {
 
 //检测手机号是否被注册
 func (sc *SignupController) IsPhoneExist(c *gin.Context){
+
 	//请求对象
 	//获取请求数据，并作表单验证
 	request := requests.SignupPhoneExistRequest{}
