@@ -19,7 +19,7 @@ var Redis *RedisClient
 
 //创建一个新的redis连接
 func NewClient(address string,username string,password string,db int) *RedisClient{
-	//1. 初始化自定的redisclient实例
+	//1. 初始化自定的redisClient实例
 	rds := &RedisClient{}
 	//2. 使用默认的context
 	rds.Context = context.Background()
