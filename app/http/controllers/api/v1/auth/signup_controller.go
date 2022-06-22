@@ -4,8 +4,8 @@ import (
 	v1 "IMfourm-go/app/http/controllers/api/v1"
 	"IMfourm-go/app/models/user"
 	"IMfourm-go/app/requests"
+	"IMfourm-go/pkg/response"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 //注册控制器
@@ -23,7 +23,7 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context){
 		return
 	}
 
-	//解析JSON请求
+	//v1--解析JSON请求
 	//if err := c.ShouldBindJSON(&request); err!=nil{
 	//	//解析失败，返回422状态码和错误信息
 	//	c.AbortWithStatusJSON(http.StatusUnprocessableEntity,gin.H{
@@ -42,8 +42,13 @@ func (sc *SignupController) IsPhoneExist(c *gin.Context){
 	//	})
 	//}
 
-	//检查数据库并返回响应
-	c.JSON(http.StatusOK,gin.H{
+	//v2--检查数据库并返回响应
+	//c.JSON(http.StatusOK,gin.H{
+	//	"exist":user.IsPhoneExist(request.Phone),
+	//})
+
+	//v3--在返回用户数据的地方使用response包
+	response.JSON(c,gin.H{
 		"exist":user.IsPhoneExist(request.Phone),
 	})
 }
@@ -71,7 +76,11 @@ func (sc *SignupController) IsEmailExist(c *gin.Context){
 	if ok := requests.Validate(c,&request,requests.SignupEmailExist);!ok{
 		return
 	}
-	c.JSON(http.StatusOK,gin.H{
-		"exist": user.IsEmailExist(request.Email),
+	//c.JSON(http.StatusOK,gin.H{
+	//	"exist": user.IsEmailExist(request.Email),
+	//})
+
+	response.JSON(c,gin.H{
+		"exist":user.IsEmailExist(request.Email),
 	})
 }

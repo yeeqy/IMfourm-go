@@ -2,10 +2,10 @@ package middlewares
 
 import (
 	"IMfourm-go/pkg/logger"
+	"IMfourm-go/pkg/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net"
-	"net/http"
 	"net/http/httputil"
 	"os"
 	"strings"
@@ -52,9 +52,10 @@ func Recovery() gin.HandlerFunc{
 					zap.Stack("stacktrace"),
 					)
 				//返回状态码
-				c.AbortWithStatusJSON(http.StatusInternalServerError,gin.H{
-					"message":"服务器内部错误，请稍后再试",
-				})
+				//c.AbortWithStatusJSON(http.StatusInternalServerError,gin.H{
+				//	"message":"服务器内部错误，请稍后再试",
+				//})
+				response.Abort500(c)
 			}
 		}()
 		c.Next()
