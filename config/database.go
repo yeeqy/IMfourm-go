@@ -21,7 +21,6 @@ func init(){
 				"max_open_connections":config.Env("DB_MAX_OPEN_CONNECTIONS",25),
 				"max_life_seconds":config.Env("DB_MAX_LIFE_SECONDS",5*60),
 
-
 			},
 		}
 	})
