@@ -2,9 +2,11 @@ package auth
 
 import (
 	v1 "IMfourm-go/app/http/controllers/api/v1"
+	"IMfourm-go/app/requests"
 	"IMfourm-go/pkg/captcha"
 	"IMfourm-go/pkg/logger"
 	"IMfourm-go/pkg/response"
+	"IMfourm-go/pkg/verifycode"
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,5 +31,20 @@ func (vc *VerifyCodeController) ShowCaptcha(c *gin.Context){
 		"captcha_id":id,
 		"captcha)image":b64s,
 	})
+}
+//发送手机验证码
+func (vc *VerifyCodeController) SendUsingPhone(c *gin.Context){
+	//1. 验证表单
+	//2. 发送SMS
 
+	req := requests.VerifyCodePhoneRequest{}
+	if ok := requests.Validate(c,&req,requests.VerifyCodePhone); !ok {
+		return
+	}
+
+	if ok := verifycode.NewVerifyCode().SendSMS(req.Phone); !ok {
+		response.Abort500(c,"发送短信失败")
+	}else {
+		response.Success(c)
+	}
 }
