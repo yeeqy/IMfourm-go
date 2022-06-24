@@ -28,23 +28,43 @@ require (
 	github.com/goccy/go-json v0.9.7 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
 	github.com/google/uuid v1.1.2 // indirect
+	github.com/gorilla/context v1.1.1 // indirect
+	github.com/gorilla/mux v1.8.0 // indirect
+	github.com/gorilla/pat v1.0.1 // indirect
+	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/ian-kent/envconf v0.0.0-20141026121121-c19809918c02 // indirect
+	github.com/ian-kent/go-log v0.0.0-20160113211217-5731446c36ab // indirect
+	github.com/ian-kent/goose v0.0.0-20141221090059-c3541ea826ad // indirect
+	github.com/ian-kent/linkio v0.0.0-20170807205755-97566b872887 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.4 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.6 // indirect
+	github.com/mailhog/MailHog v1.0.1 // indirect
+	github.com/mailhog/MailHog-Server v1.0.1 // indirect
+	github.com/mailhog/MailHog-UI v1.0.1 // indirect
+	github.com/mailhog/data v1.0.1 // indirect
+	github.com/mailhog/http v1.0.1 // indirect
+	github.com/mailhog/mhsendmail v0.2.0 // indirect
+	github.com/mailhog/smtp v1.0.1 // indirect
+	github.com/mailhog/storage v1.0.1 // indirect
 	github.com/mattn/go-isatty v0.0.14 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
+	github.com/ogier/pflag v0.0.1 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
 	github.com/pelletier/go-toml/v2 v2.0.1 // indirect
+	github.com/philhofer/fwd v1.1.1 // indirect
 	github.com/spf13/afero v1.8.2 // indirect
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.3.0 // indirect
+	github.com/t-k/fluent-logger-golang v1.0.0 // indirect
+	github.com/tinylib/msgp v1.1.6 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
@@ -55,6 +75,7 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.28.0 // indirect
 	gopkg.in/ini.v1 v1.66.4 // indirect
+	gopkg.in/mgo.v2 v2.0.0-20190816093944-a6b53ec6cb22 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0 // indirect
 )
