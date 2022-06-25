@@ -3,6 +3,7 @@ package user
 import (
 	"IMfourm-go/app/models"
 	"IMfourm-go/pkg/database"
+	"IMfourm-go/pkg/hash"
 )
 
 type User struct {
@@ -20,4 +21,9 @@ type User struct {
 //创建用户
 func (userModel *User) Create() {
 	database.DB.Create(&userModel)
+}
+
+//匹配密码
+func (userModel *User) ComparePassword(_password string) bool {
+	return hash.BcryptCheck(_password,userModel.Password)
 }
