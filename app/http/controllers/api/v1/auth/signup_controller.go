@@ -85,7 +85,7 @@ func (sc *SignupController) IsEmailExist(c *gin.Context) {
 	})
 }
 
-//使用手机和验证码进行注册
+//使用手机+验证码进行注册
 func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 	//1. 验证表单
 	req := requests.SignupUsingPhoneRequest{}
@@ -106,5 +106,28 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 		})
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试")
+	}
+}
+
+//使用Email+验证码进行注册
+func (sc *SignupController) SignupUsingEmail(c *gin.Context)  {
+	//1. 验证表单
+	req := requests.SignupUsingEmailRequest{}
+	if ok := requests.Validate(c,&req,requests.SignupUsingEmail);!ok{
+		return
+	}
+	//2.验证成功 创建数据
+	userModel := user.User{
+		Name: req.Name,
+		Email: req.Email,
+		Password: req.Password,
+	}
+	userModel.Create()
+	if userModel.ID > 0 {
+		response.CreatedJSON(c,gin.H{
+			"data":userModel,
+		})
+	}else {
+		response.Abort500(c,"创建用户失败，请稍后再试")
 	}
 }
