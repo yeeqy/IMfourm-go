@@ -4,6 +4,7 @@ import (
 	v1 "IMfourm-go/app/http/controllers/api/v1"
 	"IMfourm-go/app/models/user"
 	"IMfourm-go/app/requests"
+	"IMfourm-go/pkg/jwt"
 	"IMfourm-go/pkg/response"
 	"github.com/gin-gonic/gin"
 )
@@ -93,16 +94,20 @@ func (sc *SignupController) SignupUsingPhone(c *gin.Context) {
 		return
 	}
 	//2. 验证成功，创建数据
-	_user := user.User{
+	userModel := user.User{
 		Name:     req.Name,
 		Phone:    req.Phone,
 		Password: req.Password,
 	}
 	//模型新增的Create方法
-	_user.Create()
-	if _user.ID > 0 {
+	userModel.Create()
+
+	//if _user.ID > 0 {
+	if userModel.ID > 0 {
+		token := jwt.NewJWT().IssueToken(userModel.GetStringID(),userModel.Name)
 		response.CreatedJSON(c, gin.H{
-			"data": _user,
+			"token":token,
+			"data": userModel,
 		})
 	} else {
 		response.Abort500(c, "创建用户失败，请稍后尝试")
@@ -124,10 +129,13 @@ func (sc *SignupController) SignupUsingEmail(c *gin.Context)  {
 	}
 	userModel.Create()
 	if userModel.ID > 0 {
+		token := jwt.NewJWT().IssueToken(userModel.GetStringID(),userModel.Name)
 		response.CreatedJSON(c,gin.H{
+			"token":token,
 			"data":userModel,
 		})
 	}else {
 		response.Abort500(c,"创建用户失败，请稍后再试")
 	}
 }
+

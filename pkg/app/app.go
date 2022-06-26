@@ -1,6 +1,9 @@
 package app
 
-import "IMfourm-go/pkg/config"
+import (
+	"IMfourm-go/pkg/config"
+	"time"
+)
 
 func IsLocal() bool{
 	return config.Get("app.env") == "local"
@@ -10,4 +13,8 @@ func IsProduction() bool{
 }
 func IsTesting() bool{
 	return config.Get("app.env") == "testing"
+}
+func TimeNowInTimezone() time.Time  {
+	chinaTimezone,_ := time.LoadLocation(config.GetString("app.timezone"))
+	return time.Now().In(chinaTimezone)
 }
