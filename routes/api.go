@@ -25,6 +25,10 @@ func RegisterApiRoutes(r *gin.Engine){
 			authGroup.POST("/signup/email/exists",suc.IsEmailExist)
 			authGroup.POST("/signup/using-phone",suc.SignupUsingPhone)
 			authGroup.POST("/signup/using-email",suc.SignupUsingEmail)
+
+			lgc := new(auth.LoginController)
+			//使用手机号，短信验证码进行登录
+			authGroup.POST("/login/using-phone",lgc.LoginByPhone)
 		}
 	}
 }
