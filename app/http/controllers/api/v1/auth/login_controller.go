@@ -32,3 +32,27 @@ func (lc *LoginController) LoginByPhone(c * gin.Context){
 		})
 	}
 }
+
+//多种方法登录
+func (lc *LoginController) LoginByPassword(c *gin.Context){
+	//1. 验证表单
+	req := requests.LoginByPasswordRequest{}
+	if ok := requests.Validate(c,&req,requests.LoginByPassword);!ok{
+		return
+	}
+	//2. 尝试登陆
+	user ,err := auth.Attempt(req.LoginID,req.Password)
+	if err != nil {
+		//这样可以显示错误原因
+		//response.JSON(c,gin.H{
+		//	"data":"登陆失败",
+		//	"error":err.Error(),
+		//})
+		response.Unauthorized(c,"登陆失败")
+	} else {
+		token := jwt.NewJWT().IssueToken(user.GetStringID(),user.Name)
+		response.JSON(c,gin.H{
+			"token":token,
+		})
+	}
+}
