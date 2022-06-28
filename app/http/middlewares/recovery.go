@@ -55,7 +55,13 @@ func Recovery() gin.HandlerFunc{
 				//c.AbortWithStatusJSON(http.StatusInternalServerError,gin.H{
 				//	"message":"服务器内部错误，请稍后再试",
 				//})
-				response.Abort500(c)
+
+				//---正解
+				//response.Abort500(c)
+				response.CreatedJSON(c,gin.H{
+					"message":"服务器内部错误",
+					"error":err,
+				})
 			}
 		}()
 		c.Next()

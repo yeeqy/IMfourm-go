@@ -1,9 +1,12 @@
 package main
 
 import (
+	"IMfourm-go/app/http/middlewares"
 	"IMfourm-go/bootstrap"
 	btsConfig "IMfourm-go/config"
+	"IMfourm-go/pkg/auth"
 	"IMfourm-go/pkg/config"
+	"IMfourm-go/pkg/response"
 	"flag"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -41,6 +44,11 @@ func main(){
 
 	//初始化路由绑定
 	bootstrap.SetupRoute(router)
+
+	router.GET("/test_auth",middlewares.AuthJWT(), func(c *gin.Context) {
+		userModel := auth.CurrentUser(c)
+		response.Data(c,userModel)
+	})
 
 	//运行服务
 	err := router.Run(":"+config.Get("app.port"))
