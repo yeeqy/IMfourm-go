@@ -29,7 +29,7 @@ func (vc *VerifyCodeController) ShowCaptcha(c *gin.Context){
 	//})
 	response.JSON(c,gin.H{
 		"captcha_id":id,
-		"captcha)image":b64s,
+		"captcha_image":b64s,
 	})
 }
 //发送手机验证码

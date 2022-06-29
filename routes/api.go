@@ -21,17 +21,21 @@ func RegisterApiRoutes(r *gin.Engine){
 			//图片验证码，需要加限流
 			authGroup.POST("/verify-codes/captcha",vcc.ShowCaptcha)
 			authGroup.POST("/verify-codes/phone",vcc.SendUsingPhone)
-
-			authGroup.POST("/signup/email/exists",suc.IsEmailExist)
+			//注册
 			authGroup.POST("/signup/using-phone",suc.SignupUsingPhone)
 			authGroup.POST("/signup/using-email",suc.SignupUsingEmail)
 
+			//登录
 			lgc := new(auth.LoginController)
 			//使用手机号，短信验证码进行登录
 			authGroup.POST("/login/using-phone",lgc.LoginByPhone)
 			//支持手机号，Email和用户名
 			authGroup.POST("/login/using-password",lgc.LoginByPassword)
 			authGroup.POST("/login/refresh-token",lgc.RefreshToken)
+
+			//重置密码
+			pwc := new(auth.PasswordController)
+			authGroup.POST("/password-reset/using-phone",pwc.ResetByPhone)
 		}
 	}
 }
