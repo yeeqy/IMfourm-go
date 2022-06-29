@@ -32,3 +32,21 @@ func (pc *PasswordController) ResetByPhone(c *gin.Context){
 		response.Success(c)
 	}
 }
+
+//使用Email和验证码重置验证码
+func(pc *PasswordController) ResetByEmail(c *gin.Context){
+	//1. 验证表单
+	req := requests.ResetByEmailRequest{}
+	if ok := requests.Validate(c,&req,requests.ResetByEmail); !ok {
+		return
+	}
+	//2. 更新密码
+	userModel := user.GetByEmail(req.Email)
+	if userModel.ID == 0 {
+		response.Abort404(c)
+	} else {
+		userModel.Password = req.Password
+		userModel.Save()
+		response.Success(c)
+	}
+}
