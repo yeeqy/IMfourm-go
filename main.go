@@ -2,15 +2,16 @@ package main
 
 import (
 	"IMfourm-go/app/cmd"
+	make "IMfourm-go/app/cmd/make"
 	"IMfourm-go/bootstrap"
 	btsConfig "IMfourm-go/config"
 	"IMfourm-go/pkg/config"
 	"IMfourm-go/pkg/console"
+	"os"
 	//"flag"
 	"fmt"
 	//"github.com/gin-gonic/gin"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 func init(){
@@ -47,6 +48,7 @@ func main(){
 		cmd.CmdServe,
 		cmd.CmdKey,
 		cmd.CmdPlay,
+		make.CmdMake,
 		)
 	//配置默认运行web服务
 	cmd.RegisterDefaultCmd(rootCmd,cmd.CmdServe)
