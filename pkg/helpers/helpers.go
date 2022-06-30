@@ -6,6 +6,8 @@ import (
 	"io"
 	"reflect"
 	"time"
+	mathrand "math/rand"
+	//因为我们已经加载了 "crypto/rand"，为避免 import 冲突，使用 mathrand 作为别名。
 )
 
 func Empty(val interface{})bool{
@@ -53,7 +55,17 @@ func RandomNumber(length int) string{
 
 }
 
-//安全地获取args[0],避免panic:runtime error: index out of range
+func RandomString(length int) string{
+	mathrand.Seed(time.Now().UnixNano())
+	letters := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	b := make([]byte,length)
+	for i := range b{
+		b[i] = letters[mathrand.Intn(len(letters))]
+	}
+	return string(b)
+}
+
+// FirstElement 安全地获取args[0],避免panic:runtime error: index out of range
 func FirstElement(args []string)string{
 	if len(args) > 0 {
 		return args[0]
