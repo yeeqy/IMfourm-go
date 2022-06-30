@@ -31,13 +31,14 @@ func Empty(val interface{})bool{
 	}
 	return reflect.DeepEqual(val, reflect.Zero(v.Type()).Interface())
 	}
-//将 time.Duration 类型（nano seconds 为单位）
+
+// MicrosecondsStr 将 time.Duration 类型（nano seconds 为单位）
 //输出为小数点后 3 位的 ms （microsecond 毫秒，千分之一秒）
 func MicrosecondsStr (elapsed time.Duration) string {
 	return fmt.Sprintf("%.3fms",float64(elapsed.Nanoseconds())/1e6)
 }
 
-// 生成长度为length的随机数字字符串
+// RandomNumber 生成长度为length的随机数字字符串
 func RandomNumber(length int) string{
 	table := [...]byte{'1','2','3','4','5','6','7','8','9','0'}
 	b := make([]byte,length)
@@ -50,4 +51,12 @@ func RandomNumber(length int) string{
 	}
 	return string(b)
 
+}
+
+//安全地获取args[0],避免panic:runtime error: index out of range
+func FirstElement(args []string)string{
+	if len(args) > 0 {
+		return args[0]
+	}
+	return ""
 }
