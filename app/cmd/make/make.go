@@ -66,6 +66,7 @@ func init(){
 	//注册make命令
 	CmdMake.AddCommand(
 		CmdMakeCMD,
+		CmdMakeModel,
 		)
 }
 //格式化用户输入的内容
