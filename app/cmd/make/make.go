@@ -67,6 +67,8 @@ func init(){
 	CmdMake.AddCommand(
 		CmdMakeCMD,
 		CmdMakeModel,
+		CmdMakeAPIController,
+		CmdMakeRequest,
 		)
 }
 //格式化用户输入的内容
