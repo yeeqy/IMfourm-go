@@ -3,6 +3,8 @@ package file
 import (
 	"io/ioutil"
 	"os"
+	"path/filepath"
+	"strings"
 )
 
 //操作辅助函数
@@ -21,4 +23,8 @@ func Exists(fileToCheck string) bool {
 		return false
 	}
 	return true
+}
+
+func FileNameWithoutExtension(fileName string) string  {
+	return strings.TrimSuffix(fileName,filepath.Ext(fileName))
 }
