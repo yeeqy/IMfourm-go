@@ -8,19 +8,21 @@ import (
 	"io/ioutil"
 )
 
-//数据迁移操作类
+// Migrator 数据迁移操作类
 type Migrator struct {
 	Folder   string
 	DB       *gorm.DB
 	Migrator gorm.Migrator
 }
-//对应数据的migrations表理的一条数据
+
+// Migration 对应数据的migrations表理的一条数据
 type Migration struct {
 	ID        uint64 `gorm:"primaryKey;autoIncrement;"`
 	Migration string `gorm:"type:varchar(255);not null;unique;"`
 	Batch     int
 }
-//船舰Migrator实例，用以执行迁移操作
+
+// NewMigrator Migrator实例，用以执行迁移操作
 func NewMigrator() *Migrator{
 	//初始化必要属性
 	migrator := &Migrator{
@@ -41,7 +43,7 @@ func(migrator *Migrator) createMigrationsTable(){
 	}
 }
 
-//执行所有未迁移过的文件
+// Up 执行所有未迁移过的文件
 func (migrator *Migrator) Up(){
 	//读取所有迁移文件，确保按照时间排序
 	migrateFiles := migrator.readAllMigrationFiles()
@@ -50,7 +52,6 @@ func (migrator *Migrator) Up(){
 	//获取所有迁移数据
 	migrations := []Migration{}
 	migrator.DB.Find(&migrations)
-
 	//可以通过此值来判断数据库是否已是最新
 	runed:= false
 	//对比迁移文件进行遍历，如果没有执行过，就执行up回调
@@ -65,6 +66,38 @@ func (migrator *Migrator) Up(){
 	}
 }
 
+// Rollback 回滚上一个操作
+func (migrator *Migrator) Rollback()  {
+	//获取最后一批次的迁移数据
+	lastMigration := Migration{}
+	migrator.DB.Order("id DESC").First(&lastMigration)
+	migrations := []Migration{}
+	migrator.DB.Where("batch = ?",lastMigration.Batch).Order("id DESC").Find(&migrations)
+	//回滚最后一批次的迁移
+	if !migrator.rollbackMigrations(migrations){
+		console.Success("[migrations] table is empty, nothing to rollback")
+	}
+}
+
+func (migraotr *Migrator) rollbackMigrations(migrations []Migration) bool {
+	//标记是否真的有执行
+	runed := false
+	for _, _migration := range migrations{
+		console.Warning("rollback" + _migration.Migration)
+		mfile := getMigrationFile(_migration.Migration)
+		if mfile.Down != nil{
+			mfile.Down(database.DB.Migrator(),database.SQLDB)
+		}
+		runed = true
+
+		//回退成功就删除该记录
+		migraotr.DB.Delete(&_migration)
+		//打印运行状态
+		console.Success("finish " + mfile.FileName)
+	}
+	return runed
+}
+
 //获取当前批次值
 func (migrator *Migrator) getBatch() int {
 	//默认1
@@ -76,7 +109,6 @@ func (migrator *Migrator) getBatch() int {
 		batch = lastMigration.Batch + 1
 	}
 	return batch
-
 }
 
 //从文件目录读取文件，保证正确的时间排序
@@ -107,7 +139,9 @@ func (migrator *Migrator) runUpMigration(mfile MigrationFile,batch int){
 	//执行 up区块的 SQL
 	if mfile.Up!=nil{
 		console.Warning("migrating " + mfile.FileName)
+		//**
 		mfile.Up(database.DB.Migrator(),database.SQLDB)
+
 		console.Success("migrated " + mfile.FileName)
 	}
 	//入库
@@ -116,4 +150,23 @@ func (migrator *Migrator) runUpMigration(mfile MigrationFile,batch int){
 		Batch:     batch,
 	}).Error
 	console.ExitIf(err)
+}
+
+//回滚所有迁移
+func (migrator *Migrator) Reset(){
+	migrations := []Migration{}
+	//按照倒序读取所有迁移文件
+	migrator.DB.Order("id DESC").Find(&migrations)
+	//回滚所有迁移
+	if !migrator.rollbackMigrations(migrations){
+		console.Success("[migrations] table is empty, nothing to reset.")
+	}
+}
+
+//回滚所有迁移，并运行所有迁移
+func (migrator *Migrator) Refresh()  {
+	//回滚所有迁移
+	migrator.Reset()
+	//再次执行所有迁移
+	migrator.Up()
 }

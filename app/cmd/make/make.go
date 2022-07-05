@@ -69,6 +69,7 @@ func init(){
 		CmdMakeModel,
 		CmdMakeAPIController,
 		CmdMakeRequest,
+		CmdMakeMigration,
 		)
 }
 //格式化用户输入的内容
