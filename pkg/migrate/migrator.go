@@ -152,7 +152,7 @@ func (migrator *Migrator) runUpMigration(mfile MigrationFile,batch int){
 	console.ExitIf(err)
 }
 
-//回滚所有迁移
+// Reset 回滚所有迁移
 func (migrator *Migrator) Reset(){
 	migrations := []Migration{}
 	//按照倒序读取所有迁移文件
@@ -163,10 +163,27 @@ func (migrator *Migrator) Reset(){
 	}
 }
 
-//回滚所有迁移，并运行所有迁移
+// Refresh 回滚所有迁移，并运行所有迁移
 func (migrator *Migrator) Refresh()  {
 	//回滚所有迁移
 	migrator.Reset()
 	//再次执行所有迁移
+	migrator.Up()
+}
+
+// Drop所有表并重新运行所有迁移
+func (migrator *Migrator) Fresh() {
+	//获取数据库名称
+	dbname := database.CurrentDatabase()
+	//删除所有表
+	err := database.DeleteAllTables()
+	console.ExitIf(err)
+	console.Success("clearup database " + dbname)
+
+	//重新创建migrates表
+	migrator.createMigrationsTable()
+	console.Success("[migrations] table created.")
+
+	//重新调用up命令
 	migrator.Up()
 }
