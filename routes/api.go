@@ -4,6 +4,7 @@ import (
 	"IMfourm-go/app/http/controllers/api/v1/auth"
 	"IMfourm-go/app/http/middlewares"
 	"github.com/gin-gonic/gin"
+	controllers "IMfourm-go/app/http/controllers/api/v1"
 )
 
 func RegisterApiRoutes(r *gin.Engine){
@@ -47,6 +48,12 @@ func RegisterApiRoutes(r *gin.Engine){
 			pwc := new(auth.PasswordController)
 			authGroup.POST( "/password-reset/using-phone",pwc.ResetByPhone)
 			authGroup.POST("/password-reset/using-email",pwc.ResetByEmail)
+
+			uc := new(controllers.UsersController)
+
+			//获取当前用户
+			v1.GET("/user",middlewares.AuthJWT(),uc.CurrentUser)
+
 		}
 	}
 }

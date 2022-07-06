@@ -73,5 +73,4 @@ func runRefresh(cmd *cobra.Command, args []string)  {
 }
 func runFresh(cmd *cobra.Command, args []string)  {
 	migrator().Fresh()
-
 }
