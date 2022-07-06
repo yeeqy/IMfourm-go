@@ -11,6 +11,7 @@ import (
 //factory —— 数据工厂，用来批量生成模型对象，且使用假数据对这些模型对象的属性进行赋值；
 //seeder —— 负责将数据工厂里生成的对象插入到数据库中。
 
+// MakeUsers 创建用户对象
 func MakeUsers(times int) []user.User{
 	var obj []user.User
 
