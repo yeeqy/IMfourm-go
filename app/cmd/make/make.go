@@ -71,6 +71,7 @@ func init(){
 		CmdMakeRequest,
 		CmdMakeMigration,
 		CmdMakeFactory,
+		CmdMakeSeeder,
 		)
 }
 //格式化用户输入的内容
