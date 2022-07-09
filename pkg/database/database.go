@@ -12,7 +12,7 @@ import (
 var DB *gorm.DB
 var SQLDB *sql.DB
 
-//连接数据库
+// Connect 连接数据库
 func Connect(dbConfig gorm.Dialector,_logger gormlogger.Interface){
 	var err error
 	DB,err = gorm.Open(dbConfig,&gorm.Config{
@@ -65,4 +65,11 @@ func deleteMySQLTables() error{
 	//开启MySQL外键检测
 	DB.Exec("SET foreign_key_checks = 1;")
 	return nil
+}
+
+// TableName 方便获取表名称，这里用于拼接RESTFULL URL
+func TableName(obj interface{}) string {
+	stmt := &gorm.Statement{DB:DB}
+	stmt.Parse(obj)
+	return stmt.Schema.Table
 }

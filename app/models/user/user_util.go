@@ -1,23 +1,29 @@
 package user
 
-import "IMfourm-go/pkg/database"
+import (
+	"IMfourm-go/pkg/app"
+	"IMfourm-go/pkg/database"
+	"IMfourm-go/pkg/paginator"
+	"github.com/gin-gonic/gin"
+)
 
 //存放模型相关的数据库操作
 
-//邮箱是否已注册
+// IsEmailExist 邮箱是否已注册
 func IsEmailExist(email string)bool  {
 	var count int64
 	database.DB.Model(User{}).Where("email=?",email).Count(&count)
 	return count > 0
 }
-//手机号是否已注册
+
+// IsPhoneExist 手机号是否已注册
 func IsPhoneExist(phone string) bool{
 	var count int64
 	database.DB.Model(User{}).Where("phone=?",phone).Count(&count)
 	return count > 0
 }
 
-//通过手机号获取用户
+// GetByPhone 通过手机号获取用户
 func GetByPhone(phone string)(userModel User){
 	database.DB.Where("phone = ?",phone).First(&userModel)
 	return
@@ -41,5 +47,15 @@ func GetByEmail(email string)(userModel User){
 
 func All()(user []User)  {
 	database.DB.Find(&user)
+	return
+}
+
+// Paginate 分页内容
+func Paginate(c *gin.Context,perPage int)(users []User,paging paginator.Paging){
+	paging = paginator.Paginate(
+		c, database.DB.Model(User{}), &users,
+		app.V1URL(database.TableName(&User{})),
+		perPage,
+		)
 	return
 }
