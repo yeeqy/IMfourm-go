@@ -8,7 +8,7 @@ import (
 )
 //授权相关逻辑
 
-// 尝试登录
+// Attempt 尝试登录
 func Attempt(email string, password string)(user.User, error){
 	userModel := user.GetByMulti(email)
 	if userModel.ID == 0 {
@@ -19,7 +19,8 @@ func Attempt(email string, password string)(user.User, error){
 	}
 	return userModel, nil
 }
-//登录指定用户
+
+// LoginByPhone 登录指定用户
 func LoginByPhone(phone string)(user.User,error){
 	userModel := user.GetByPhone(phone)
 	if userModel.ID == 0 {
@@ -27,7 +28,8 @@ func LoginByPhone(phone string)(user.User,error){
 	}
 	return userModel,nil
 }
-//从gin.Context中获取当前登录用户
+
+// CurrentUser 从gin.Context中获取当前登录用户
 func CurrentUser(c *gin.Context) user.User{
 	userModel,ok := c.MustGet("current_user").(user.User)
 	if !ok {
@@ -36,7 +38,8 @@ func CurrentUser(c *gin.Context) user.User{
 	}
 	return userModel
 }
-//从gin.Context中获取当前登录用户ID
+
+// CurrentUID 从gin.Context中获取当前登录用户ID
 func CurrentUID(c *gin.Context) string{
 	return c.GetString("current_user_id")
 }

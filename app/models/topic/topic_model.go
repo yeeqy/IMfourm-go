@@ -13,7 +13,7 @@ type Topic struct {
 	//put fields in here
 	Title      string `json:"title,omitempty"`
 	Body       string `json:"body,omitempty"`
-	UserId     string `json:"user_id,omitempty"`
+	UserID     string `json:"user_id,omitempty"`
 	CategoryID string `json:"category_id,omitempty"`
 
 	//通过user_id关联用户

@@ -2,6 +2,7 @@ package v1
 
 import (
 	"IMfourm-go/app/models/topic"
+	"IMfourm-go/app/policies"
 	"IMfourm-go/pkg/auth"
 
 	"IMfourm-go/app/requests"
@@ -36,7 +37,7 @@ func (ctrl *TopicsController) Store(c *gin.Context) {
 		Title: req.Title,
 		Body: req.Body,
 		CategoryID: req.CategoryID,
-		UserId: auth.CurrentUID(c),
+		UserID: auth.CurrentUID(c),
 	}
 	topicModel.Create()
 	if topicModel.ID > 0{
@@ -50,6 +51,10 @@ func(ctrl *TopicsController) Update(c *gin.Context){
 	topicModel := topic.Get(c.Param("id"))
 	if topicModel.ID == 0 {
 		response.Abort404(c)
+		return
+	}
+	if ok := policies.CanModifyTopic(c,topicModel);!ok{
+		response.Abort403(c)
 		return
 	}
 
