@@ -42,34 +42,26 @@ func (ctrl *CategoriesController) Store(c *gin.Context) {
 	}
 }
 
-//func(ctrl *CategoriesController) Update(c *gin.Context){
-//	categoryModel := category.Get(c.Param("id"))
-//	if categoryModel.ID == 0 {
-//		response.Abort404(c)
-//		return
-//	}
-//	if ok:= policies.CanModifyCategory(c,VariableNameModel); !ok{
-//		response.Abort403(c)
-//		return
-//	}
-//	req := requests.CategoryRequest{}
-//	bindOK,errs := requests.Validate(c,&req,requests.CategorySave)
-//	if !bindOK{
-//		return
-//	}
-//	if len(errs) > 0 {
-//		response.ValidationError(c,20101,errs)
-//		return
-//	}
-//	categoryModel.FieldName = req.FieldName
-//	rowsAffected := categoryModel.Save()
-//	if rowsAffected > 0 {
-//		response.Data(c,categoryModel)
-//	} else {
-//		response.Abort500(c,"更新失败，请稍后再试")
-//	}
-//}
-//
+func(ctrl *CategoriesController) Update(c *gin.Context){
+	categoryModel := category.Get(c.Param("id"))
+	if categoryModel.ID == 0 {
+		response.Abort404(c)
+		return
+	}
+	req := requests.CategoryRequest{}
+	if ok := requests.Validate(c,&req,requests.CategorySave); !ok{
+		return
+	}
+	categoryModel.Name = req.Name
+	categoryModel.Description = req.Description
+	rowsAffected := categoryModel.Save()
+	if rowsAffected > 0 {
+		response.Data(c,categoryModel)
+	} else {
+		response.Abort500(c)
+	}
+}
+
 //func (ctrl *CategoriesController) Delete(c *gin.Context){
 //	categoryModel := category.Get(c.Param("id"))
 //	if categoryModel.ID == 0 {
