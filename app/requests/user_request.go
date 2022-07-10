@@ -1,6 +1,7 @@
 package requests
 
 import (
+	"IMfourm-go/app/requests/validators"
 	"IMfourm-go/pkg/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/thedevsaddam/govalidator"
@@ -24,19 +25,53 @@ func UserUpdateProfile(data interface{}, c *gin.Context) map[string][]string {
 	}
 	messages := govalidator.MapData{
 		"name": []string{
-		    "required:用户名为必填项",
+			"required:用户名为必填项",
 			"alpha_num:用户名格式错误，只允许数字和英文",
-		    "between:用户名长度需要在3~20之间",
-		    "not_exists:用户名已被占用",
+			"between:用户名长度需要在3~20之间",
+			"not_exists:用户名已被占用",
 		},
 		"introduction": []string{
-		    "min_cn:描述长度需至少 4 个字",
-		    "max_cn:描述长度不能超过 240 个字",
+			"min_cn:描述长度需至少 4 个字",
+			"max_cn:描述长度不能超过 240 个字",
 		},
-		"city":[]string{
+		"city": []string{
 			"min_cn:城市需至少2个字",
 			"max_cn:城市不能超过20个字",
 		},
 	}
 	return validate(data, rules, messages)
+}
+
+type UserUpdateEmailRequest struct {
+	Email      string `json:"email,omitempty" valid:"email"`
+	VerifyCode string `json:"verify_code,omitempty" valid:"verify_code"`
+}
+
+func UserUpdateEmail(data interface{}, c *gin.Context) map[string][]string {
+	currentUser := auth.CurrentUser(c)
+	rules := govalidator.MapData{
+		"email": []string{"required", "min:4", "max:30", "email",
+			"not_exists:user,email," + currentUser.GetStringID(),
+			"not_in:" + currentUser.Email,
+		},
+		//这个digits写成了digit，报了服务器内部错误说
+		"verify_code": []string{"required", "digits:6"},
+	}
+	messages := govalidator.MapData{
+		"email": []string{
+			"required:Email为必填项",
+			"min:Email长度需大于4",
+			"max:Email长度需小于30",
+			"not_exists:Email已被占用",
+			"not_in:新的Email与旧Email一致",
+		},
+		"verify_code": []string{
+			"required:验证码为必填项",
+			"digits:验证码长度必须为6位数字",
+		},
+	}
+	errs := validate(data,rules,messages)
+	_data := data.(*UserUpdateEmailRequest)
+	errs = validators.ValidateVerifyCode(_data.Email,_data.VerifyCode,errs)
+	return errs
 }

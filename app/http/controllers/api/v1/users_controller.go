@@ -50,3 +50,21 @@ func (ctrl *UsersController) UpdateProfile(c *gin.Context)  {
 	}
 
 }
+
+func (ctrl *UsersController) UpdateEmail(c *gin.Context)  {
+	req := requests.UserUpdateEmailRequest{}
+	if ok:= requests.Validate(c,&req,requests.UserUpdateEmail);!ok{
+		return
+	}
+	currentUser := auth.CurrentUser(c)
+	currentUser.Email = req.Email
+
+	rowsAffected := currentUser.Save()
+
+	if rowsAffected > 0 {
+		response.Success(c)
+	} else {
+		response.Abort500(c,"更新失败，请稍后尝试")
+	}
+
+}
