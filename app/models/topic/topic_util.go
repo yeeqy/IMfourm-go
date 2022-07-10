@@ -3,14 +3,15 @@ import (
     "IMfourm-go/pkg/app"
     "IMfourm-go/pkg/database"
     "IMfourm-go/pkg/paginator"
+    "gorm.io/gorm/clause"
 
-     "github.com/gin-gonic/gin"
+    "github.com/gin-gonic/gin"
 )
 
 //model_util 模板文件我们放进去一些常用的方法：
 
 func Get(idstr string)(topic Topic){
-    database.DB.Where("id",idstr).First(&topic)
+    database.DB.Preload(clause.Associations).Where("id",idstr).First(&topic)
     return
 }
 func GetBy(field,value string)(topic Topic){
