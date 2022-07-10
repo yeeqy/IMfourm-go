@@ -9,7 +9,12 @@ import (
 type User struct {
 	models.BaseModel
 
-	Name     string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
+
+	City         string `json:"city,omitempty"`
+	Introduction string `json:"introduction,omitempty"`
+	Avatar       string `json:"avatar,omitempty"`
+
 	Email    string `json:"-"`
 	Phone    string `json:"-"`
 	Password string `json:"-"`
@@ -25,10 +30,10 @@ func (userModel *User) Create() {
 
 //匹配密码
 func (userModel *User) ComparePassword(_password string) bool {
-	return hash.BcryptCheck(_password,userModel.Password)
+	return hash.BcryptCheck(_password, userModel.Password)
 }
 
-func (userModel *User) Save() (rowsAffected int64){
+func (userModel *User) Save() (rowsAffected int64) {
 	result := database.DB.Save(&userModel)
 	return result.RowsAffected
 }

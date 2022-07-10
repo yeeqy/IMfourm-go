@@ -19,7 +19,6 @@ func (ctrl *UsersController) CurrentUser(c *gin.Context){
 
 // Index 所有用户
 func (ctrl *UsersController) Index(c *gin.Context)  {
-
 	req := requests.PaginationRequest{}
 	if ok := requests.Validate(c,&req,requests.Pagination); !ok{
 		return
@@ -30,5 +29,24 @@ func (ctrl *UsersController) Index(c *gin.Context)  {
 		"data":data,
 		"pager":pager,
 	})
+}
+
+func (ctrl *UsersController) UpdateProfile(c *gin.Context)  {
+	req := requests.UserUpdateProfileRequest{}
+	if ok := requests.Validate(c,&req,requests.UserUpdateProfile);!ok{
+		return
+	}
+	currentUser := auth.CurrentUser(c)
+	currentUser.Name = req.Name
+	currentUser.City = req.City
+	currentUser.Introduction = req.Introduction
+
+	rowsAffected := currentUser.Save()
+
+	if rowsAffected > 0 {
+		response.Data(c,currentUser)
+	} else {
+		response.Abort500(c,"更新失败，请稍后尝试")
+	}
 
 }
