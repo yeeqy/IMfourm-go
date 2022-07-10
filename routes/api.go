@@ -62,6 +62,7 @@ func RegisterApiRoutes(r *gin.Engine){
 		cgc := new(controllers.CategoriesController)
 		cgcGroup := v1.Group("/categories")
 		{
+			cgcGroup.GET("",cgc.Index)
 			//登录用户才能创建分类，所以用了AuthJWT中间件
 			cgcGroup.POST("",middlewares.AuthJWT(),cgc.Store)
 			cgcGroup.PUT("/:id",middlewares.AuthJWT(),cgc.Update)
