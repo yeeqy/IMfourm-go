@@ -66,6 +66,7 @@ func RegisterApiRoutes(r *gin.Engine){
 			//登录用户才能创建分类，所以用了AuthJWT中间件
 			cgcGroup.POST("",middlewares.AuthJWT(),cgc.Store)
 			cgcGroup.PUT("/:id",middlewares.AuthJWT(),cgc.Update)
+			cgcGroup.DELETE("/:id",middlewares.AuthJWT(),cgc.Delete)
 		}
 	}
 }
