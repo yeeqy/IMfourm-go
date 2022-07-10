@@ -8,7 +8,8 @@ import (
 	"github.com/thedevsaddam/govalidator"
 	"net/http"
 )
-//验证函数类型
+
+// ValidatorFunc 验证函数类型
 type ValidatorFunc func(interface{},*gin.Context)map[string][]string
 
 func Validate(c *gin.Context, obj interface{}, handler ValidatorFunc) bool {
@@ -36,7 +37,6 @@ func Validate(c *gin.Context, obj interface{}, handler ValidatorFunc) bool {
 	return true
 }
 
-
 func validate(data interface{},rules govalidator.MapData,messages govalidator.MapData) map[string][]string{
 	opts := govalidator.Options{
 		Data: data,
@@ -45,4 +45,15 @@ func validate(data interface{},rules govalidator.MapData,messages govalidator.Ma
 		Messages: messages,
 	}
 	return govalidator.New(opts).ValidateStruct()
+}
+
+func validateFile(c *gin.Context, data interface{}, rules govalidator.MapData, messages govalidator.MapData) map[string][]string  {
+	opts := govalidator.Options{
+		Request: c.Request,
+		Rules: rules,
+		Messages: messages,
+		TagIdentifier: "valid",
+	}
+	//调用go validator的validate方法来验证
+	return govalidator.New(opts).Validate()
 }

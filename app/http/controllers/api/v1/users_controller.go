@@ -4,6 +4,8 @@ import (
 	"IMfourm-go/app/models/user"
 	"IMfourm-go/app/requests"
 	"IMfourm-go/pkg/auth"
+	"IMfourm-go/pkg/config"
+	"IMfourm-go/pkg/file"
 	"IMfourm-go/pkg/response"
 	"github.com/gin-gonic/gin"
 )
@@ -87,7 +89,7 @@ func (ctrl *UsersController) UpdatePhone(c *gin.Context) {
 	}
 }
 
-func (ctrl *UsersController) UpdatePassword(c *gin.Context)  {
+func (ctrl *UsersController) UpdatePassword(c *gin.Context) {
 	request := requests.UserUpdatePasswordRequest{}
 	if ok := requests.Validate(c, &request, requests.UserUpdatePassword); !ok {
 		return
@@ -102,7 +104,25 @@ func (ctrl *UsersController) UpdatePassword(c *gin.Context)  {
 		// 更新密码为新密码
 		currentUser.Password = request.NewPassword
 		currentUser.Save()
-
-		response.Success(c)
 	}
+}
+
+func (ctrl *UsersController) UpdateAvatar(c *gin.Context)  {
+	req := requests.UserUpdateAvatarRequest{}
+	if ok := requests.Validate(c,&req,requests.UserUpdateAvatar);!ok{
+		return
+	}
+	//处理文件上传的逻辑封装在file.SaveUploadAvatar方法里
+	avatar,err := file.SaveUploadAvatar(c,req.Avatar)
+	if err!=nil{
+		response.Abort500(c,"上传头像失败，请稍后尝试")
+		return
+	}
+
+	currentUser := auth.CurrentUser(c)
+	currentUser.Avatar = config.GetString("app.url") + avatar
+	currentUser.Save()
+
+	response.Data(c,currentUser)
+
 }

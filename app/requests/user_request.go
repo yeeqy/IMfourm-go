@@ -5,6 +5,7 @@ import (
 	"IMfourm-go/pkg/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/thedevsaddam/govalidator"
+	"mime/multipart"
 )
 
 type UserUpdateProfileRequest struct {
@@ -144,6 +145,27 @@ func UserUpdatePassword(data interface{}, c *gin.Context) map[string][]string {
 	_data := data.(*UserUpdatePasswordRequest)
 	errs = validators.ValidatePasswordConfirm(_data.NewPassword,_data.NewPasswordConfirm,errs)
 	return errs
+}
 
+//上传用户头像
 
+type UserUpdateAvatarRequest struct {
+	//*multipart.FileHeader 是 Go validator 验证文件必须使用的类型。
+	Avatar *multipart.FileHeader `form:"avatar" valid:"avatar"`
+}
+
+func UserUpdateAvatar(data interface{},c *gin.Context) map[string][]string  {
+	rules := govalidator.MapData{
+		//Go validator 规定了，验证文件必须在字段前方加 file: 前缀
+		//size单位bytes，20971520--20mb
+		"file:avatar":[]string{"ext:png,jpg,jpeg","size:20971520","required"},
+	}
+	messages := govalidator.MapData{
+		"file:avatar":[]string{
+			"ext:ext头像只能上传png,jpg,jpeg 任意一种图片",
+			"size:头像文件最大不能超过20MB",
+			"required:必须上传图片",
+		},
+	}
+	return validateFile(c,data,rules,messages)
 }
