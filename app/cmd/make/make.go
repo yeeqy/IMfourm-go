@@ -72,6 +72,7 @@ func init(){
 		CmdMakeMigration,
 		CmdMakeFactory,
 		CmdMakeSeeder,
+		CmdMakePolicy,
 		)
 }
 //格式化用户输入的内容
