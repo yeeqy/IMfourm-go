@@ -10,9 +10,10 @@ type LinksController struct {
 	BaseAPIController
 }
 
+
 func (ctrl *LinksController) Index(c *gin.Context){
-	links := link.All()
-	response.Data(c,links)
+	//调用缓存后的数据
+	response.Data(c,link.AllCache())
 }
 
 //func(ctrl *LinksController) Show(c *gin.Context){
