@@ -24,6 +24,7 @@ func All()(categories []Category){
 func IsExist(field, value string) bool {
     var count int64
     database.DB.Model(Category{}).Where(" = ?", field,value).Count(&count)
+    return count > 0
 }
 func Paginate(c *gin.Context, perPage int) (categories []Category, paging paginator.Paging) {
     paging = paginator.Paginate(

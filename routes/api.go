@@ -52,12 +52,18 @@ func RegisterApiRoutes(r *gin.Engine){
 		}
 
 		uc := new(controllers.UsersController)
-
 		//获取当前用户
 		v1.GET("/user",middlewares.AuthJWT(),uc.CurrentUser)
 		userGroup := v1.Group("/users")
 		{
 			userGroup.GET("",uc.Index)
+		}
+
+		cgc := new(controllers.CategoriesController)
+		cgcGroup := v1.Group("/categories")
+		{
+			//登录用户才能创建分类，所以用了AuthJWT中间件
+			cgcGroup.POST("",middlewares.AuthJWT(),cgc.Store)
 		}
 	}
 }
