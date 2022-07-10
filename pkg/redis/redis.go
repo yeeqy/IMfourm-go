@@ -17,7 +17,7 @@ var once sync.Once
 
 var Redis *RedisClient
 
-//创建一个新的redis连接
+// NewClient 创建一个新的redis连接
 func NewClient(address string,username string,password string,db int) *RedisClient{
 	//1. 初始化自定的redisClient实例
 	rds := &RedisClient{}
@@ -46,7 +46,8 @@ func ConnectRedis(address string,username string,password string,db int){
 		Redis = NewClient(address,username,password,db)
 	})
 }
-//存储key对应的value，且设置过期时间
+
+// Set 存储key对应的value，且设置过期时间
 func (rds RedisClient) Set(key string,value interface{},expiration time.Duration)bool{
 	if err := rds.Client.Set(rds.Context,key,value,expiration).Err();err!=nil{
 		logger.ErrorString("Redis","Set",err.Error())
