@@ -46,31 +46,30 @@ func (ctrl *TopicsController) Store(c *gin.Context) {
 	}
 }
 
-//func(ctrl *TopicsController) Update(c *gin.Context){
-//	topicModel := topic.Get(c.Param("id"))
-//	if topicModel.ID == 0 {
-//		response.Abort404(c)
-//		return
-//	}
-//
-//	req := requests.TopicRequest{}
-//	bindOK,errs := requests.Validate(c,&req,requests.TopicSave)
-//	if !bindOK{
-//		return
-//	}
-//	if len(errs) > 0 {
-//		response.ValidationError(c,20101,errs)
-//		return
-//	}
-//	topicModel.FieldName = req.FieldName
-//	rowsAffected := topicModel.Save()
-//	if rowsAffected > 0 {
-//		response.Data(c,topicModel)
-//	} else {
-//		response.Abort500(c,"更新失败，请稍后再试")
-//	}
-//}
-//
+func(ctrl *TopicsController) Update(c *gin.Context){
+	topicModel := topic.Get(c.Param("id"))
+	if topicModel.ID == 0 {
+		response.Abort404(c)
+		return
+	}
+
+	req := requests.TopicRequest{}
+	if ok := requests.Validate(c,&req,requests.TopicSave);!ok{
+		return
+	}
+
+	topicModel.Title = req.Title
+	topicModel.Body = req.Body
+	topicModel.CategoryID = req.CategoryID
+
+	rowsAffected := topicModel.Save()
+	if rowsAffected > 0 {
+		response.Data(c,topicModel)
+	} else {
+		response.Abort500(c,"更新失败，请稍后再试")
+	}
+}
+
 //func (ctrl *TopicsController) Delete(c *gin.Context){
 //	topicModel := topic.Get(c.Param("id"))
 //	if topicModel.ID == 0 {

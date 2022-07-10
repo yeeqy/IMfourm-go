@@ -73,6 +73,7 @@ func RegisterApiRoutes(r *gin.Engine){
 		tpcGroup := v1.Group("/topics")
 		{
 			tpcGroup.POST("",middlewares.AuthJWT(),tpc.Store)
+			tpcGroup.PUT("/:id",middlewares.AuthJWT(),tpc.Update)
 		}
 	}
 }
