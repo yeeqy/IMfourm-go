@@ -14,7 +14,8 @@ func init(){
 			"ufl":config.Env("APP_URL","http://localhost:3000"),
 			//尝试写Asia/Hangzhou然后报错500了
 			"timezone":config.Env("TIMEZONE","Asia/Shanghai"),
-
+			//API域名，未设置的话所有API URL加 api 前缀，比如http://domain.com/api/v1/users
+			"api_domain":config.Env("API_DOMAIN"),
 		}
 	})
 }
