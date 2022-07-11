@@ -57,10 +57,13 @@ func SaveUploadAvatar(c *gin.Context,file *multipart.FileHeader)(string,error)  
 	if err != nil {
 		return avatar,err
 	}
+	//Thumbnail scales the image up or down using the specified resample filter,
+	//crops it to the specified width and hight and returns the transformed image.
 	resizeAvatar := imaging.Thumbnail(img,256,256,imaging.Lanczos)
 	resizeAvatarName := randomNameFromUploadFile(file)
 	resizeAvatarPath := publicPath + dirName + resizeAvatarName
 
+	//Save saves the image to file with the specified filename
 	err = imaging.Save(resizeAvatar,resizeAvatarPath)
 	if err != nil {
 		return avatar,err
